@@ -1,21 +1,24 @@
 import React from 'react';
-import { KeyboardAwareScrollView, } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {primaryColor, primaryColorBg, secondaryColor, secondaryColorBg} from '../assets/THEME/theme'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 import {  StyleSheet, 
 
     Text,
     View,
+    Image,
     TextInput,
     Button,
     TextBase,
 } from 'react-native';
 import SelectPicker from 'react-native-form-select-picker'; // Import the package
-import {splashScreenColor, primaryColor, secondaryColor} from '../assets/THEME/theme'
 import {Picker} from '@react-native-community/picker';
 import {  useState } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-export default function Demo() {
+export default function Form({navigation}) {
     const [location, setLocation] = useState('');
     const [time, setTime] = useState('');
     const [minute, setMinute] = useState('');
@@ -32,23 +35,32 @@ export default function Demo() {
     // }
 
     return(
+        <SafeAreaProvider> 
         <View style = {styles.container}>
-            <KeyboardAwareScrollView
-            style={styles.nestedContainer}
-            keyboardShouldPersistTaps="always">
-                
+            <View style = {styles.nestedContainer}>
+            <View style = {styles.nestedTopContainer}>
+
+            <TouchableOpacity style={styles.goBackBtn}  onPress={ navigation.goBack()}>
+               <Image style={styles.goBackBtn}  source={require("../assets/ICONS/back.png")} />
+                    </TouchableOpacity>
+           
+                </View>
+                <View style = {styles.nestedBottomContainer}>
+
             <Text style = {styles.headingText}>
             বিজ্ঞাপন দিন 
             </Text>
             <Text style = {styles.subheadingText}>
             মাত্র কয়েক সেকেন্ডেই আপনার বিজ্ঞাপন দেখুন বসুন্ধরা যমুনা সহ ৬০ টির বেশি শপিং কমপ্লেক্স এর ডিজিটাল সাইনেজ ডিসপ্লে তে 
             </Text>
+            <KeyboardAwareScrollView
+            style={styles.scrollView}
+            keyboardShouldPersistTaps="never">
+
             <View style={styles.inputContainer}>
-
-
             <TextInput
                 style={styles.textInputStyle}
-                placeholder='আপনার বিজ্ঞাপনটি  আপলোড করুন '
+                placeholder="বিজ্ঞাপনটি  আপলোড করুন"
                 placeholderTextColor="#aaaaaa"
                 // onChangeText={(text) => setEmail(text)}
                 underlineColorAndroid="transparent"
@@ -135,90 +147,152 @@ export default function Demo() {
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
                 />
-
-                <TouchableOpacity style={styles.confirmBtn} >
-                    <Text style={styles.btnText}>কন্ফার্ম</Text>
+             <TouchableOpacity style={styles.confirmBtn} >
+                    <Text style={styles.btnText}>কনফার্ম</Text>
                     </TouchableOpacity>
-                </View>
-            </KeyboardAwareScrollView>
+             </View>
+              </KeyboardAwareScrollView>
+              </View>
+    </View>
+
+
+               
         </View>
+        </SafeAreaProvider>
     );
 }
 
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-        padding: 5,
-        display: 'flex',
-      flexDirection: 'column',
-      backgroundColor: 'white',
-      padding: 15,
-      justifyContent: 'center',
-      alignItems: 'center',
-
+    flex:1,
+    flexDirection: 'column',
+      backgroundColor: "white",
+      padding: 10,
     },
+
     nestedContainer: {
        flex: 1,
+       width:'100%',
        flexDirection: 'column',
+       justifyContent:"center",
+       alignItems:"center",
+       textAlign:'center',
+       borderRadius: 15,
+       paddingTop:10,
        textAlign: 'center',
-    //   
     },
+
+    nestedTopContainer: {
+       flex: 1,
+       width:'100%',
+       flexDirection: 'row',
+       justifyContent:"flex-start",
+       alignItems:'center',
+       borderRadius: 15,
+       paddingLeft:5,
+       marginTop: 10,
+    },
+    
+    goBackBtn:{
+        height: 40,
+        width: 40,
+        borderRadius: 5,
+
+      },
+      
+      goBackBtnImg:{
+        height: 30,
+        width: 30,
+        borderRadius: 5,
+        alignItems: 'center',
+
+
+      },
+
+    nestedBottomContainer: {
+       flex: 10,
+       width:'100%',
+       flexDirection: 'column',
+       justifyContent:"center",
+       alignItems:"center",
+       textAlign:'center',
+       backgroundColor: secondaryColorBg,
+       borderRadius: 15,
+       marginTop: "5%",
+       paddingTop: 10,
+       paddingLeft:5,
+       paddingRight: 5,
+       paddingBottom: 10,
+    },
+
+
+    scrollView:{
+        flex:1,
+        width:"100%",
+        textAlign:'center',
+        flexDirection:'column',
+    },
+
+
+
     inputContainer: {
         flex:1,
+        width:'100%',
        justifyContent:"center",
        flexDirection: 'column',
        textAlign: 'center',
        alignItems: 'center',
-       margin: 5,
-       padding: 5,
+       paddingTop: 5,
     },
   
     headingText:{
-      fontSize: 18,
+      fontSize: 22,
       color: primaryColor,
       padding: 5,
-      color: 'blue'
+      textAlign:'center',
     },
     
     subheadingText:{
-        fontSize: 14,
+        fontSize: 12,
         padding: 5,
-        color: 'skyblue',
+        color: primaryColorBg,
         textAlign: 'center'
       },
 
     textInputStyle:{
-        fontSize: 12,
+        fontSize: 16,
         padding: 5,
-        color: 'skyblue',
-        borderWidth: 0.1,
-        borderColor: 'blue',
+        color: primaryColor,
         borderRadius: 5,
         height: 30,
         width: '80%',
         margin: 5,
-        shadowColor: 'red',
-        shadowOpacity: 2,
-        shadowRadius: 10,
+        // shadowColor: primaryColorBg,
+        // shadowOpacity: 2,
+        // shadowRadius: 10,
+        backgroundColor: 'white',
       },
 
       pickerContainer:{
         flex:1,
         width: '80%',
+        height:30,
         justifyContent:"center",
         flexDirection: 'column',
         textAlign: 'center',
         alignItems: 'center',
         margin: 5,
         padding: 5,
-        shadowColor: 'gray',
-        shadowOpacity: 2,
-        shadowRadius: 5,
-        borderWidth: 0.1,
-        borderColor: 'gray',
-        borderRadius: 5,
-        color: "blue" ,
+        // shadowColor: secondaryColor,
+        // shadowOpacity: 2,
+        // shadowRadius: 5,
+        // borderWidth: 0.1,
+        borderRadius: 10,
+        borderColor: 'white',
+        color: primaryColorBg,
+        fontSize:12,
+        backgroundColor:'white',
         
       },
       pickerItem:{
@@ -228,21 +302,34 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         margin: 5,
         padding: 5,
-        shadowColor: 'red',
         shadowOpacity: 2,
         shadowRadius: 10,
         color: 'red',
       },
       confirmBtn:{
+          fontSize: 16,
           color: 'white',
-          backgroundColor: 'green',
-          height: 20,
-          width: '100%',
-          margin: 20,
-          padding: 5,
+          justifyContent:'center',
+          backgroundColor: primaryColor,
+          height: 50,
+          width: 150,
+          marginTop: 20,
+          padding: 10,
+          borderRadius: 5,
+
       },
+
+
+
+
+
+      
+    
+
       btnText:{
         color: 'white',
+        textAlign:'center',
+        fontSize: 12,
     },
     }
 );

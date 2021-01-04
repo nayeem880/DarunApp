@@ -17,11 +17,11 @@ import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 // importing the screens
-import {AppIntro, Login, Signup,HomeScreen, Qr, Dashboard, Confirm, Payment,  Order, Otp, } from './screens/index';
+import {AppIntro, Login, Signup,HomeScreen, Qr, Dashboard, Confirm, Payment,Form,  Order, Otp, } from './screens/index';
 import {primaryColor, secondaryColor} from './assets/THEME/theme.js'
 import  {AuthContext} from './components/context'
 import { StyleSheet,TouchableOpacity, TouchableHighlight, Image, View, Text} from 'react-native';
-
+import customBottom from "./styles/customBottom"
 // creating the stack navigator object
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,27 +56,42 @@ function Root(){
     <Tab.Navigator initialRouteName="HomeScreen"
       backBehavior="initialRoute"
       labeled={false}
-      activeColor={secondaryColor}
-      inactiveColor={primaryColor}
+      activeColor={primaryColor}
+      inactiveColor={secondaryColor}
       screenOptions={{
       headerShown: false
     }}
-
-    barStyle={{ backgroundColor: 'white',
-     padding: 5,
-     margin: 10,
-     borderRadius: 15, }}
+    tabBarOptions= {{
+      showLabel: false,
+      showIcon: true,
+      tintColor: '#333',
+      activeTintColor: '#aaa',
+      style:{
+        borderRadius: 10,
+        margin:5,
+        backgroundColor: 'white',
+      }
+    }}
+    keyboardHidesTabBar ={true}
+    tabStyle ={styles.navBar}
     >
-        <Tab.Screen name="HomeScreen" component={HomeScreen}
-                    options={{ tabBarLabel: 'Home', tabBarIcon: ({ color }) => (
-                    <Image source={require("./assets/ICONS/home.png")} style={styles.tabBarIconStyle}/>),}} />
-            <Tab.Screen name="Order" component={Order} />
+
+            <Tab.Screen name="HomeScreen" component={HomeScreen}
+                    options={{  tabBarIcon: ({ color }) => (
+                    <Image source={require("./assets/ICONS/homePink.png")} style={styles.tabBarIconStyle}/>),}} />
+           
+            {/* <Tab.Screen name="Order" component={Order} />
             <Tab.Screen name="Payment" component={Payment} />
-            <Tab.Screen name="Confirm" component={Confirm} />
-            <Tab.Screen name="Qr" component={Qr} />
-            <Tab.Screen name="Dashboard" component={Dashboard} />
+            <Tab.Screen name="Confirm" component={Confirm} /> */}
+
+            <Tab.Screen name="Qr" component={Qr} options={{ tabBarIcon: ({ color }) => (
+                    <Image source={require("./assets/ICONS/scann.png")} style={styles.tabBarIconStyle}/>),}} />
+
+            <Tab.Screen name="Dashboard" component={Dashboard} options={{ tabBarIcon: ({ color }) => (
+                    <Image source={require("./assets/ICONS/stat.png")} style={styles.tabBarIconStyle}/>),}} />
         </Tab.Navigator>
   );
+
 }
 
 function AppStackWithIntro(){
@@ -98,6 +113,17 @@ return (
     <Stack.Screen name="Signup" component={Signup} />
     <Stack.Screen name="Otp" component={Otp} />
     <Stack.Screen name="HomeScreen" component={HomeScreen} />
+  </Stack.Navigator>
+);
+}
+function AdvertiseStack(){
+return (
+  <Stack.Navigator screenOptions={{
+  headerShown: false
+}}>
+    <Stack.Screen name="Form" component={Form} />
+    <Stack.Screen name="Order" component={Order} />
+    <Stack.Screen name="Payment" component={Payment} />
   </Stack.Navigator>
 );
 }
@@ -210,7 +236,8 @@ const authContext = useMemo(()=> ({
                             headerShown: false}}>
                        {/* <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
                        <Stack.Screen name="Root" component={Root} /> */}
-                      <Drawer.Screen name="Root" component={Root} />
+                      <Stack.Screen name="Root" component={Root} />
+                      <Stack.Screen name="Form" component={Form} />
                   </Drawer.Navigator>
               </NavigationContainer>
         </SafeAreaProvider>
@@ -226,16 +253,15 @@ const authContext = useMemo(()=> ({
                   headerShown: false}}>
                       {/* <Stack.Screen name="AppStackWithoutIntro" component={AppStackWithoutIntro} />
                       <Stack.Screen name="Root" component={Root} /> */}
-                    <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                    <Stack.Screen name="Root" component={Root} />
+                    <Stack.Screen name="Form" component={Form} />
+
                 </Tab.Navigator>
             </NavigationContainer>
         </SafeAreaProvider>
       </AuthContext.Provider>
        ) 
   }
-
-
-
 
 }
 
@@ -245,7 +271,17 @@ const styles = StyleSheet.create({
   tabBarIconStyle: {
     width: 20,
     height: 20,
+    resizeMode:'contain',
   },
+  navBar:{
+    height: 20,
+    borderRadius: 15,
+    margin: 10,
+    backgroundColor: 'red',
+
+  },
+
+
   
 }
 )

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet,TouchableOpacity, TouchableHighlight, Image, View, Text} from 'react-native';
+import { StyleSheet,Model, TouchableOpacity,FlatList, TouchableHighlight, Image, View, Text} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import {primaryColor, primaryColorBg, secondaryColor, secondaryColorBg} from '../assets/THEME/theme'
 // import SvgComponent from "../assets/SVG/darun"
 
 export default function HomeScreen({route, navigation}){
@@ -9,12 +10,41 @@ export default function HomeScreen({route, navigation}){
       const [entities, setEntities] = useState([])
       // const [userLoggedOut, setUserLoggedOut] = useState(false);
 
-  
+
+
+      const DATA = [
+        {
+          id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+          image : require('../assets/images/offer2.jpg')
+        },
+        {
+          id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+          image : require('../assets/images/offer3.jpg')
+
+        },
+        {
+          id: '58694a0f-3da1-471f-bd96-145571e29d72',
+          image : require('../assets/images/offer4.jpg')
+        },
+      ];
+
+      const Item = ({ image }) => (
+        <View style={styles.flItemView}>
+            <Image style={styles.flItemViewImg} source={image} />
+        </View>
+      );
+      
+
+      const renderItem = ({ item }) => (
+        <Item image={item.image}/>
+      );
                 return (
                     <SafeAreaView style={styles.container}>
                         <View style={styles.topContainer}> 
                             <View style={styles.menuBar}>
-                                <TouchableOpacity onPress={openDrawer=()=>(navigation.openDrawer())} >
+                                <TouchableOpacity onPress={()=>(
+                                    navigation.toggleDrawer()
+                                )}>
                                     <Image source = {require('../assets/images/menu1.png')}
                                                 style={styles.menuImg} />
                                 </TouchableOpacity>
@@ -31,8 +61,25 @@ export default function HomeScreen({route, navigation}){
                         </View>
 
                
-                        <View style={styles.bottomContainer}>
+                    <View style={styles.bottomContainer}>
+                        <View style={styles.nestedBottomContainer}>
+                          <Text style={styles.featureHeading}>অফার ডিসকাউন্ট</Text>
+                             <View style={styles.nestedBottomContainerTop}>
+                                <FlatList  horizontal
+  pagingEnabled={false}
+  showsHorizontalScrollIndicator={false} style={styles.nestedBottomContainerTopFlatlist}
+                                 data={DATA}
+                                        renderItem={renderItem}
+                                        keyExtractor={item => item.id}
+                                    />
+                                    {/* <View style={styles.container4}>
+                                        <Text>nestedBottom </Text>
+                                        
+                                    </View>                                 */}
+                                </View>
                             <View style={styles.nestedBottomContainerMiddle}>
+                                <Text style={styles.featureHeading}>আরো ফিচার </Text>
+
                                         <View style={styles.middleFlatlist}>
                                         <TouchableOpacity style={styles.featureItem}>
                                                 <Image source={require("../assets/images/winner.png")} style={styles.featureImg} />
@@ -55,36 +102,28 @@ export default function HomeScreen({route, navigation}){
                                     </View>
 
 
-                            {/* <View style={styles.nestedBottomContainer}> */}
-                                <View style={styles.nestedBottomContainerTop}>
-                                    <TouchableOpacity style={styles.container1}>
+
+                                    <Text style={styles.featureHeading}>বিজ্ঞাপন দিন </Text>
+                                <View style={styles.nestedBottomContainerBottom}>
+
+                                    <TouchableOpacity style={styles.container1} onPress={()=>(
+                                        navigation.navigate('Form')
+                                    )}>
                                         <Image source={require("../assets/images/intro2.png")} style={styles.headingImg} />
+                                        <Text style={styles.headingText}>হাই ডেফিনেশন এড   </Text>
+                                        <Text style={styles.subheadingText}>১০+ শপিংমল, প্রিমিয়াম লোকেশনে সাইনেজ ডিসপ্লে মুহূর্তেই, সহজেই, অল্প খরচে</Text>
                                         <Text style={styles.headingText}>বিজ্ঞাপন দিন </Text>
-                                        <Text style={styles.subheadingText}>১০টির বেশি শপিং মল এবং প্রিমিয়াম লোকেশনে ডিজিটাল সাইনেজ ডিসপ্লেতে আপনার ব্রান্ডের বিজ্ঞাপন দিন মুহূর্তেই, সহজেই এবং অল্প খরচে</Text>
-                                        <Text style={styles.headingText}>ক্লিক করুন  </Text>
                                     
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.container2}>
+                                    <TouchableOpacity style={styles.container1}>
                                         <Image source={require("../assets/images/intro1.png")} style={styles.headingImg} />
-                                        <Text  style={styles.headingText}>ভাড়া দিন এবং আয় করুন  </Text>        
-                                        <Text  style={styles.subheadingText}>নিজের ডিজিটাল ডিসপ্লেতে এড দিতে দিয়ে ঘন্টা প্রতি টাকা আয় করুন।  এখনই আপনার রেজিস্ট্রেশন করুন   </Text>        
-                                        <Text style={styles.headingText}>আরো জানুন </Text>
+                                        <Text  style={styles.headingText}>ভাড়া দিন - আয় করুন  </Text>        
+                                        <Text  style={styles.subheadingText}>নিজের ডিজিটাল ডিসপ্লেতে এড দিতে দিয়ে ঘন্টা প্রতি টাকা আয় করুন </Text>        
+                                        <Text style={styles.headingText}> রেজিস্ট্রেশন করুন    </Text>
                                     </TouchableOpacity>
                                 
                                 </View>
-                                
-
-
-                                <View style={styles.nestedBottomContainerBottom}>
-                                    <View style={styles.container3}>
-                                        <Text>hello nestedBottom </Text>
-                                        
-                                    </View>
-                                    <View style={styles.container4}>
-                                        <Text>nestedBottom </Text>
-                                        
-                                    </View>                                
-                                </View>                                 
+                            </View>
                         </View>
                     </SafeAreaView>
                 );
@@ -96,7 +135,7 @@ export default function HomeScreen({route, navigation}){
             flex:1,
             justifyContent: 'center',
             alignItems:"center",
-            backgroundColor: "#F4F4FF",            
+            backgroundColor: "white",            
             flexDirection: 'column',
             margin:"1%",
             padding:"1%",
@@ -105,34 +144,40 @@ export default function HomeScreen({route, navigation}){
         topContainer: { 
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: "white",
             borderRadius: 15,
             width: '100%',
             flexDirection: 'row',
-            margin:3,
-            padding:3, 
+            padding:5, 
+            marginLeft:5, 
+            marginRight:5, 
+            backgroundColor: secondaryColorBg,
+
+
+
         },
 
          menuBar:{
             padding: 3,
-            borderRadius: 50,
+            borderRadius: 15,
             shadowColor: 'lightgray',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 2,
-            backgroundColor: '#F4F4FF',
             shadowRadius: 10,
             justifyContent:'center',
             alignItems: 'center',
             width: 40,
             height:40,
+            backgroundColor: "white",
+
             resizeMode: 'center',
         },
 
 
         menuImg:{
-            width: 30,
-            height:30,
-            borderRadius: 50,
+            width: 25,
+            height:25,
+            padding:10,
+            borderRadius: 15,
             resizeMode: 'contain',
         },
 
@@ -143,13 +188,12 @@ export default function HomeScreen({route, navigation}){
             marginLeft: 5,
             marginRight: 5,
             padding: 10,
-            borderRadius: 50,
+            borderRadius: 15,
             shadowColor: 'lightgray',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 2,
-            backgroundColor: '#F4F4FF',
+            backgroundColor: 'white',
             shadowRadius: 10,
-
         },
 
         logoIcon:{
@@ -167,14 +211,13 @@ export default function HomeScreen({route, navigation}){
         justifyContent:'center',
         alignItems:"center", 
         padding: 3,
-        borderRadius: 50,
+        borderRadius: 15,
 
         shadowColor: 'lightgray',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 2,
-            backgroundColor: '#F4F4FF',
             shadowRadius: 10,
-        backgroundColor: '#F4F4FF',
+            backgroundColor: "white",
         width: 40,
         height: 40,
         resizeMode: 'contain'
@@ -183,70 +226,91 @@ export default function HomeScreen({route, navigation}){
         profileMenuImg:{
             width: 30,
             height:30,
-            borderRadius: 50,
+            borderRadius: 15,
             color: '#010A43',
             resizeMode: 'contain',
-
         },    
         
+
+
+
         
         // bottom or main container
         bottomContainer: {
-            flex:5,
+            flex:1,
             justifyContent: 'center',
             backgroundColor: "white",
             borderRadius: 15,
             width: '100%',
             flexDirection: 'column',
-            padding:"1%",
-            margin:5,
+            padding:5,
 
             shadowColor: 'lightgray',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 5,
             shadowRadius: 10,
-            
         },
             
 
         nestedBottomContainer: {
-            flex:1,
+            flex:10,
             justifyContent: 'space-between',
             backgroundColor: "white",
             borderRadius: 15,
             flexDirection: 'row',
-            // padding:"1%",
-            // margin:"1%",
-
-            // width: '100%',
-
             flexDirection: 'column',
             shadowColor: 'lightgray',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 5,
             shadowRadius: 10,
-                    
         },
+
+
         
         nestedBottomContainerTop: {
             flex:2,
-            justifyContent: 'space-between',
             borderRadius: 15,
-            flexDirection: 'row',
+            width: "100%",
+            height: '100%',
+            overflow: 'hidden',
+            backgroundColor: secondaryColorBg,
+
         },
+
+
+        
+        flItemView:{
+            borderRadius: 15,
+            width: 200,
+            height: '90%',
+            margin:5,
+            justifyContent:'center',
+            alignItems: 'center'
+           
+        },
+
+        flItemViewImg:{
+            width: '100%',
+            height: '100%',
+            color: primaryColor,
+            borderRadius: 15,
+        },
+
+
 
         container1:{
             flex:1,
-            backgroundColor: '#F4F4FF',
+            backgroundColor: "white",
             borderRadius: 15,
             flexDirection: 'column',
             padding:"2%",
             margin: 5,
+            backgroundColor: secondaryColorBg,
+
             shadowColor: '#F9F8F8',
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 5,
             shadowRadius: 10,
-
         },
         
 
@@ -256,8 +320,6 @@ export default function HomeScreen({route, navigation}){
             height: '40%',
             borderRadius: 10,
             resizeMode: 'contain',
-
-
 
         },
 
@@ -271,48 +333,51 @@ export default function HomeScreen({route, navigation}){
 
         subheadingText:{
             fontSize:11,
-            color: 'gray',
+            color: primaryColorBg,
             paddingTop: "2%",
             paddingLeft : "2%",
 
 
         },
 
-        container2:{
-            flex:1,
-            backgroundColor: '#F4F4FF',
-            borderRadius: 15,
-            flexDirection: 'column',
-            padding:"2%",
-            margin: 5,
-            shadowColor: '#F9F8F8',
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 5,
-            shadowRadius: 10,
-
-        },
-
+   
         nestedBottomContainerMiddle: {
-            flex:0.7,
+            flex:2,
+            flexDirection: 'column', 
+            
                   
          },
-        
-        middleFlatlist:{
-            backgroundColor: '#F4F4FF',
-            padding: 5,
-            borderRadius: 15,
-            height: "100%",
-            justifyContent:'space-between',
-            flexDirection: 'row',  
+
+         featureHeading:{
+            fontSize:14,
+            color: '#010A43',
+            paddingLeft : "2%",
+            margin: 5,
+            fontWeight: "500",
         },
 
+        middleFlatlist:{
+            backgroundColor: "white",
+            borderRadius: 15,
+            justifyContent:'space-between',
+            flexDirection: 'row',  
+            alignItems: 'center',
+
+        },
+
+       
+
         featureItem:{
-            backgroundColor: 'white',
             width: '24%',
             padding:"1%",
             justifyContent:'center',
             alignItems: 'center',
-            borderRadius: 10,
+            borderRadius: 15,
+            paddingTop: 15,
+            flexDirection: 'column',
+            backgroundColor: secondaryColorBg,
+            
+           
             
         },
         
@@ -327,11 +392,11 @@ export default function HomeScreen({route, navigation}){
 
         featureText:{
             fontSize: 11,
-            color: '#010A43',
+            color: primaryColor,
             padding:5,
             margin: 5,
+            
             alignItems: 'center',
-
         },
         
 
@@ -340,24 +405,17 @@ export default function HomeScreen({route, navigation}){
 
 
 
-
-
-
-
-
-
-
-
-
         nestedBottomContainerBottom: {
-            flex:1,
+            flex:3.5,
             justifyContent: 'space-between',
             borderRadius: 15,
-            flexDirection: 'row',   
+            flexDirection: 'row', 
+ 
+ 
         },
 
         middle: {
-            backgroundColor: 'orange',
+            backgroundColor: "white",
             borderRadius: 15,
             flexDirection: 'row',
             padding:5,
@@ -375,7 +433,7 @@ export default function HomeScreen({route, navigation}){
         
         container3:{
             flex: 1,
-            backgroundColor: '#F4F4FF',
+            backgroundColor: "white",
             borderRadius: 15,
             flexDirection: 'row',
             padding:'2%',
@@ -388,8 +446,8 @@ export default function HomeScreen({route, navigation}){
         },
         container4:{
            flex: 1,
-            backgroundColor: '#F4F4FF',
-            borderRadius: 15,
+           backgroundColor: "white",
+           borderRadius: 15,
             flexDirection: 'row',
             padding:'2%',
             margin:"2%",
