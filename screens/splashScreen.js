@@ -5,6 +5,7 @@ import {  StyleSheet,
     Text,
     View,
     Image,
+    ActivityIndicator,
     Button,
 } from 'react-native';
 import {splashScreenColor, primaryColor, secondaryColor, secondaryColorBg} from '../assets/THEME/theme.js'
@@ -20,6 +21,9 @@ export default function SplashScreen({navigation}) {
             <Text style = {styles.splashTextSecondary}>
             A BRAND INFLUENCER APP
             </Text>
+            <View style={styles.activityIndicator}>
+                <ActivityIndicator/>
+            </View>
         </View>
     );
 }
@@ -31,16 +35,14 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       padding: 5,
-      height: "100%",
       width: '100%',
-      display: 'flex',
       flexDirection: 'column',
     },
 
 
     logoStyle:{
-      width: 80,
-      height: 80,
+      width: 100,
+      height: 100,
       resizeMode: 'contain',
     },
 
@@ -54,6 +56,12 @@ const styles = StyleSheet.create({
       fontSize: 14,
       color: secondaryColor,
       marginTop: 2,
+      },
+      activityIndicator:{
+      width: 20,
+      height: 20,
+      color: primaryColor,
+      marginTop: 20,
       },
     }
 );

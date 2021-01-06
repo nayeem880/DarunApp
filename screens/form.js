@@ -2,7 +2,6 @@ import React from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {primaryColor, primaryColorBg, secondaryColor, secondaryColorBg} from '../assets/THEME/theme'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Root from '../app'
 import {  StyleSheet, 
 
     Text,
@@ -37,7 +36,6 @@ export default function Form({navigation}) {
 
     const goBack = () => {
       navigation.goBack()
-      // navigation.navigate('Root')
   }
 
     return(

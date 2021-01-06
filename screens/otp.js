@@ -31,7 +31,7 @@ const onPsResetRequest = () => {
         <SafeAreaView style={styles.container}>
             <KeyboardAwareScrollView
             style={styles.nestedcontainer}
-            keyboardShouldPersistTaps="always">
+            keyboardShouldPersistTaps="never">
         { (!resetPs) ? (
             <>
             <Image

@@ -12,14 +12,18 @@ export default function Signup({navigation}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [animationLoading, setAnimationLoading] = useState(false)
+
 
     const onFooterLinkPress = () => {
         navigation.navigate('Login')
     } 
 
     const onRegisterPress = () => {
+        setAnimationLoading(true)
         if (password !== confirmPassword) {
             Alert.alert("Passwords don't match.")
+            setAnimationLoading(false)
             return
         }
         firebase
@@ -42,18 +46,21 @@ export default function Signup({navigation}) {
                     })
                     .catch((error) => {
                        Alert.alert(error.message)
+                       setAnimationLoading(false)
                     });
             })
             .catch((error) => {
                 Alert.alert(error.message)
+                setAnimationLoading(false)
         });
     }
 
     return (
         <SafeAreaView style={styles.container}>
+            
             <KeyboardAwareScrollView
                 style={styles.nestedcontainer}
-                keyboardShouldPersistTaps="always">
+                keyboardShouldPersistTaps="never">
                 <Image
                     style={styles.logo}
                     source={require('../assets/ICONS/createAccount.png')}
@@ -96,11 +103,25 @@ export default function Signup({navigation}) {
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => onRegisterPress()}>
-                    <Text style={styles.buttonTitle}>Create account</Text>
-                </TouchableOpacity>
+
+                    {animationLoading?(
+                                <>
+                                    <View style={styles.button}>
+                                            <Text style={styles.buttonTitle}>Loading . . .</Text>
+                                </View>
+                                </>
+                                ):(
+                                    <>
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    onPress={() => onRegisterPress()}>
+                                    <Text style={styles.buttonTitle}>Create Account</Text>
+                                </TouchableOpacity>
+                                </>
+
+                                )
+                            }
+
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Already got an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
                 </View>

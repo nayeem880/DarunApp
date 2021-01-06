@@ -29,12 +29,7 @@ import {DrawerContent} from "./screens/drawerContent"
 // creating the stack navigator object
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
-
-
-
-
+const Drawer = createDrawerNavigator();
 
 
 
@@ -42,11 +37,7 @@ export default function App({ navigation }) {
   // declaring all the usestates here
   const [isLoading, setIsLoading] = useState(true)
   const [userToken, setUserToken] = useState(null)
-
   const [user, setUser] = useState(null)
-  const [hideSplash, setHideSplash] = useState(false);
-  const Drawer = createDrawerNavigator();
-  const [showRealApp, setShowRealApp] = useState(false);
   const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
 
@@ -84,10 +75,6 @@ function Root(){
             <Tab.Screen name="HomeScreen" component={HomeScreen}
                     options={{  tabBarIcon: ({ color }) => (
                     <Image source={require("./assets/ICONS/homePink.png")} style={styles.tabBarIconStyle}/>),}} />
-           
-            {/* <Tab.Screen name="Order" component={Order} />
-            <Tab.Screen name="Payment" component={Payment} />
-            <Tab.Screen name="Confirm" component={Confirm} /> */}
 
             <Tab.Screen name="Qr" component={Qr} options={{ tabBarIcon: ({ color }) => (
                     <Image source={require("./assets/ICONS/scann.png")} style={styles.tabBarIconStyle}/>),}} />
@@ -119,7 +106,6 @@ return (
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="Signup" component={Signup} />
     <Stack.Screen name="Otp" component={Otp} />
-    <Stack.Screen name="HomeScreen" component={HomeScreen} />
   </Stack.Navigator>
 );
 }
@@ -136,27 +122,7 @@ return (
 );
 }
 
-    
-function ClientHome({ navigation }) {
-  return (
-        <Stack.Navigator screenOptions={{
-                         headerShown: false}}>
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Signup" component={Signup} />
-              <Stack.Screen name="Otp" component={Otp} />
-              <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        </Stack.Navigator>
-);
-}
 
-
-function PersonalHome({ navigation }) {
-return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-);
-}
 
 
 // App stack views **************************************************************
@@ -184,14 +150,15 @@ const authContext = useMemo(()=> ({
   
   
        useEffect(()=>{
-          setTimeout(()=> {
-            setIsLoading(false);
-          }, 2000); 
-  
+        setTimeout(()=> {
+          setIsLoading(false);
+        }, 2000); 
+
+          
         // onboarding functionality with the asyncstorage 
-            AsyncStorage.getItem('donelaunched').then(value=>{
+            AsyncStorage.getItem('newval').then(value=>{
               if(value==null){
-                AsyncStorage.setItem('donelaunched', true)
+                AsyncStorage.setItem('newval', true)
                 setIsFirstLaunch(true)
               }
               else{
@@ -200,7 +167,7 @@ const authContext = useMemo(()=> ({
               }
             });
 
-            // geeting files from firebase
+            // getting files from firebase
             const usersRef = firebase.firestore().collection('users');
                   firebase.auth().onAuthStateChanged(user => {
                       if (user) {
@@ -216,12 +183,9 @@ const authContext = useMemo(()=> ({
                                   setLoading(false)
                                 });
                             } 
-
                             else {setLoading(false)}  
                                   });
-                    }, []);
-
-                
+                  }, []);
 
   if (isLoading) {
             return <SplashScreen />; 
@@ -238,12 +202,12 @@ const authContext = useMemo(()=> ({
               <NavigationContainer>
                   <Drawer.Navigator drawerContent={props => <DrawerContent {...props} /> }  screenOptions={{
                             headerShown: false}}>
-                       {/* <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
-                       <Stack.Screen name="Root" component={Root} /> */}
-                      <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
-                      <Stack.Screen name="Root" component={Root} />
-                      <Stack.Screen name="Form" component={Form} />
-                      <Stack.Screen name="Enlist" component={Enlist} />
+                          <>
+                          <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
+                          <Stack.Screen name="Root" component={Root} />
+                          <Stack.Screen name="Form" component={Form} />
+                          <Stack.Screen name="Enlist" component={Enlist} />
+                          </>
                   </Drawer.Navigator>
               </NavigationContainer>
         </SafeAreaProvider>
@@ -255,22 +219,24 @@ const authContext = useMemo(()=> ({
       <AuthContext.Provider value={authContext}>
         <SafeAreaProvider>
             <NavigationContainer>
-                <Tab.Navigator screenOptions={{
-                  headerShown: false}}>
-                      {/* <Stack.Screen name="AppStackWithoutIntro" component={AppStackWithoutIntro} />
-                      <Stack.Screen name="Root" component={Root} /> */}
-                    <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
-                    <Stack.Screen name="Root" component={Root} />
-                    <Stack.Screen name="Form" component={Form} />
-                    <Stack.Screen name="Enlist" component={Enlist} />
-
-                </Tab.Navigator>
+                <Stack.Navigator screenOptions={{headerShown: false}}>
+                    { user ? (
+                       <>
+                          <Stack.Screen name="Root" component={Root} />
+                          <Stack.Screen name="Form" component={Form} />
+                          <Stack.Screen name="Enlist" component={Enlist} />
+                        </>
+                        ):(
+                          <Stack.Screen name="AppStackWithoutIntro" component={AppStackWithoutIntro} />
+                          ) 
+                          
+                    }
+                </Stack.Navigator>
             </NavigationContainer>
         </SafeAreaProvider>
       </AuthContext.Provider>
-       ) 
+    ) 
   }
-
 }
 
 
@@ -288,18 +254,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
 
   },
+      })
 
 
-  
-}
-)
 
 
+{/* 
+{/* 
 //   return (
 //     <SafeAreaProvider>
 //             <NavigationContainer>
 //             { user ? (
-//                     <Drawer.Navigator initialRouteName="ClientHome">
+//                     <Drawer.Navigator initialRouteName="ClientHome"> *
 //                           <Drawer.Screen name="PersonalHome" component={PersonalHome} />
 //                           <Drawer.Screen name="ClientHome" component={ClientHome} />
 //                     </Drawer.Navigator>
@@ -331,7 +297,7 @@ const styles = StyleSheet.create({
 // //     </NavigationContainer>
 // //   );
 
-// //   { user ? (
+// //   { user ? ( */}
 //                     <Tab.Navigator screenOptions={{
 //                           headerShown: false}}>
 //                         <Tab.Screen name="Sandbox" component={Sandbox} />

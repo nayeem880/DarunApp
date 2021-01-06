@@ -13,8 +13,8 @@ import {
   TouchableOpacity,
 
 } from 'react-native';
-
-
+import AppIntroSlider from "react-native-app-intro-slider"
+import Icon from 'react-native-ionicons';
 
 const slides = [
   
@@ -100,18 +100,47 @@ export default function AppIntro({navigation}) {
   
   return(
 <>
-     
         <AppIntroSlider 
-          activeDotStyle={{width:30, backgroundColor:'black'}}
+          dotStyle={{backgroundColor: secondaryColor, width:10}}
+          activeDotStyle={{width:30, backgroundColor:primaryColor}}
           data={slides}
           renderItem={RenderItem}
           onDone={onDone}
+          renderNextButton={()=>{
+            return(
+              <>
+              <View style={styles.renderNextButton}>
+              <Icon
+                  name="md-arrow-round-forward"
+                  size={24}
+                  style={{backgroundColor: 'transparent'}}
+                />
+              </View>
+              </>
+            )
+          }}
+
+          renderPrevButton={()=>{
+            return(
+              <>
+              <View style={styles.renderPrevButton}>
+              <Icon
+                  name="md-arrow-round-backward"
+                  size={24}
+                  style={{backgroundColor: 'transparent'}}
+                />
+              </View>
+              </>
+            )
+          }}
+          
+          dotClickEnabled={true}
           showSkipButton={false}
+          showPrevButton={true}
           onSkip={onSkip}/>
     </>
     );
   };
-
 
   
 const styles = StyleSheet.create({
@@ -147,5 +176,20 @@ const styles = StyleSheet.create({
     color: primaryColor,
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  renderNextButton:{
+    width:40,
+    height:40,
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: secondaryColorBg,
+    borderRadius : 15,
+  },
+  renderPrevButton:{
+    width:40,
+    height:40,
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: secondaryColorBg,
   },
 });

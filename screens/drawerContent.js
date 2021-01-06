@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { SafeAreaView,  } from 'react-native-safe-area-context';
 import {primaryColor, primaryColorBg, secondaryColor, secondaryColorBg} from '../assets/THEME/theme'
 
@@ -12,7 +12,22 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
+
 export function DrawerContent(){
+    const [animationLoading, setAnimationLoading] = useState(false)
+
+
+    function logOut({navigation}) {
+        setAnimationLoading(true)
+        firebase.auth().signOut().then(function() {
+            navigation.navigate('AppWithoutIntro')
+            }).catch(function(error) {
+                console.log("Error occured during logout")
+                setAnimationLoading(false)
+        });
+    }
+
+
     return(
         <SafeAreaView style={styles.container}>
                 <View style={styles.nestedcontainer}>
@@ -82,22 +97,31 @@ export function DrawerContent(){
                            <Text style={styles.topcontainerText} >
                                 Switch Account
                             </Text>
-                            
-                    <View style={styles.nestedbottomcontainer}>
-                            <Image source={require("../assets/ICONS/profile.png")} style={styles.logoutImg} />
-                            <Text style={styles.logoutText} >
-                                Log Out
-                            </Text>
-                    </View>
+
+                            { animationLoading?(
+                                        <>
+                                        <View style={styles.nestedbottomcontainer}>
+                                                <Image source={require("../assets/ICONS/back.png")} style={styles.logoutImg} />
+                                                <Text style={styles.logoutText}>Logging You Out...</Text>
+                                        </View>
+                                    </>
+                                    ):(
+
+                                    <>
+                                    <TouchableOpacity onPress={logOut} style={styles.nestedbottomcontainer}>
+                                                <Image source={require("../assets/ICONS/back.png")} style={styles.logoutImg} />
+                                                <Text style={styles.logoutText}>Log Out...</Text>
+                                        </TouchableOpacity>
+                                    </>
+                                    )
+                                } 
+                    
                     </View>
                 </View>
         </SafeAreaView>
 
 
-
-
     )
-
 }
         
   

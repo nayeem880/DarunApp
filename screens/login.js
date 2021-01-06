@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Text, TextInput, Alert, TouchableOpacity,StyleSheet, View } from 'react-native'
+import { Image, Text,ActivityIndicator,  TextInput, Alert, TouchableOpacity,StyleSheet, View, ViewBase } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { firebase } from '../firebase/config';
 import  {AuthContext} from '../components/context'
 import { primaryColor, primaryColorBg, secondaryColor, secondaryColorBg } from '../assets/THEME/theme';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import {  SafeAreaView } from 'react-native-safe-area-context';
 
 
 
 
 
 export default function Login({navigation}) {
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [animationLoading, setAnimationLoading] = useState(false)
 
   const onFooterLinkPress = () => {
       navigation.navigate('Signup')
@@ -22,43 +24,52 @@ export default function Login({navigation}) {
       navigation.navigate('Otp')
   }
 
+
+
   const {login} = React.useContext(AuthContext)
 
   const onLoginPress = () => {
-    firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((response) => {
-            const uid = response.user.uid
-            const usersRef = firebase.firestore().collection('users')
-            console.log("Login SUccessful")
-            usersRef
-                .doc(uid)
-                .get()
-                .then(firestoreDocument => {
-                    if (!firestoreDocument.exists) {
-                      Alert.alert("User does not exist anymore.")
-                        return;
-                    }
-                    const user = firestoreDocument.data()
-                    navigation.navigate('HomeScreen', {user})
-                })
-                .catch(error => {
-                  Alert.alert(error.message)
-                });
-        })
-        .catch(error => {
-          Alert.alert(error.message)
-        })
+      try{ 
+                    setAnimationLoading(true)
+                    firebase
+                    .auth()
+                    .signInWithEmailAndPassword(email, password)
+                    .then((response) => {
+                        const uid = response.user.uid
+                        const usersRef = firebase.firestore().collection('users')
+                        usersRef
+                            .doc(uid)
+                            .get()
+                            .then(firestoreDocument => {
+                                if (!firestoreDocument.exists) {
+                                    Alert.alert("User does not exist anymore.")
+                                    setAnimationLoading(false)
+                                    return;
+                                }
+                                const user = firestoreDocument.data()
+                                navigation.navigate('Root', {user})
+                            })
+                            .catch(error => {
+                                Alert.alert(error.message)
+                                setAnimationLoading(false)
+                            });
+                    })
+                    .catch(error => {
+                        Alert.alert(error.message)
+                        setAnimationLoading(false)
+                    })
+    }
+    catch(e){
+        Alert.alert("There is a problem with your internet connection. Please check the connection")
+        setAnimationLoading(false)
+    }           
 }
-
-
 
     return (
         
          <SafeAreaView style={styles.container}>
             <KeyboardAwareScrollView style={styles.nestedcontainer}
-            keyboardShouldPersistTaps="always">
+            keyboardShouldPersistTaps="never">
                 <Image
                     style={styles.logo}
                     source={require('../assets/ICONS/login.png')}
@@ -82,11 +93,25 @@ export default function Login({navigation}) {
                 underlineColorAndroid="transparent"
                 autoCapitalize="none"
             />
+           
+            {animationLoading?(
+                 <>
+                <View style={styles.activityIndicator}>
+                        <ActivityIndicator/>
+               </View>
+               </>
+            ):(
+                <>
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => onLoginPress()}>
+                onPress={() => login()}>
                 <Text style={styles.buttonTitle}>Log in</Text>
             </TouchableOpacity>
+            </>
+
+            )
+        }
+            
             <View style={styles.footerView}>
                 <Text style={styles.footerText}>Don't have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>
             </View>
@@ -165,5 +190,9 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 14,
         paddingLeft:5,
-    }
+    },
+    activityIndicator:{
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 })

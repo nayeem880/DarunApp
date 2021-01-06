@@ -718,7 +718,6 @@ export default function HomeScreen({route, navigation}){
 
         },
         
-        
     })
 
 
