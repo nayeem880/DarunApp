@@ -132,29 +132,137 @@ return (
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+initialLoginState = {
+  isLoading: true,
+  userEmail: null,
+  userId: null, 
+
+}
+
+const loginReducer = (prevState, action) => {
+  switch(action.type){
+    case "RETRIEVE_UID":
+      return {
+        ...prevState,
+        userId : action.uid,
+        isLoading: false,
+      };
+    case "LOGIN":
+      return {
+        ...prevState,
+        userEmail : action.email,
+        userId : action.uid,
+        isLoading: false,
+      };
+    case "LOGOUT":
+      return {
+        ...prevState,
+        userEmail : null,
+        userId : null,
+        isLoading: false,
+      };
+    case "SIGNUP":
+      return {
+        ...prevState,
+        userEmail : action.email,
+        userId : action.uid,
+        isLoading: false,
+      };
+  }
+}
+
+
+const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
+
+
+
 const authContext = useMemo(()=> ({
-    login: () => {
-      setUserToken('fjgda');
-      setIsLoading(false);
+    login: (email, password) => {
+      // setUserID('fjgda');
+      // setIsLoading(false);
+      let uid;
+      firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(async(response) => {
+        uid = response.user.uid
+          // console.log(response)
+          try{
+            await AsyncStorage.setItem('uid', uid)
+           }
+           catch(e){
+             console.log(e)
+           }
+      })
+      .catch(error => {
+          Alert.alert(error.message)
+      })
+
+      dispatch({type: "LOGIN", userEmail: email, userId: uid})
+  
     },
-    logOut: () => {
-      setUserToken(null);
-      setIsLoading(false);
+
+    logOut: async() => {
+      firebase.
+      auth().
+      signOut().
+      then(function() {
+        
+                }) 
+      .catch(function(error) {
+              console.log("Error occured during logout")
+            });
+
+      try{
+        await AsyncStorage.removeItem('uid');
+        }
+      catch(e){
+        console.log(e)
+      }
+    
+      
+      dispatch({type: "LOGOUT"})
     },
+
     signUp: () => {
-      setUserToken('fjgda');
-      setIsLoading(false);
+      // setUserID('fjgda');
+      // setIsLoading(false);
     },
 }
 ));
   
-  
        useEffect(()=>{
-        setTimeout(()=> {
-          setIsLoading(false);
-        }, 2000); 
-
-          
+        setTimeout(async()=> {
+          let uid;
+          try {
+            uid = await AsyncStorage.getItem('uid');
+          } catch(e) {
+            console.log(e);
+          }
+          dispatch({type: "RETRIEVE_UID", userId: uid})
+        }, 1000); 
+ 
         // onboarding functionality with the asyncstorage 
             AsyncStorage.getItem('newval').then(value=>{
               if(value==null){
@@ -167,27 +275,9 @@ const authContext = useMemo(()=> ({
               }
             });
 
-            // getting files from firebase
-            const usersRef = firebase.firestore().collection('users');
-                  firebase.auth().onAuthStateChanged(user => {
-                      if (user) {
-                          usersRef
-                            .doc(user.uid)
-                            .get()
-                            .then((document) => {
-                                const userData = document.data()
-                                setLoading(false)
-                                setUser(userData)
-                              })
-                              .catch((error) => {
-                                  setLoading(false)
-                                });
-                            } 
-                            else {setLoading(false)}  
-                                  });
                   }, []);
 
-  if (isLoading) {
+  if (loginState.isLoading) {
             return <SplashScreen />; 
           }
 
@@ -202,12 +292,16 @@ const authContext = useMemo(()=> ({
               <NavigationContainer>
                   <Drawer.Navigator drawerContent={props => <DrawerContent {...props} /> }  screenOptions={{
                             headerShown: false}}>
-                          <>
-                          <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
+                           { loginState.userId !==null ? (
+                       <>
                           <Stack.Screen name="Root" component={Root} />
                           <Stack.Screen name="Form" component={Form} />
                           <Stack.Screen name="Enlist" component={Enlist} />
-                          </>
+                        </>
+                        ):(
+                          <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
+                          ) 
+                    }
                   </Drawer.Navigator>
               </NavigationContainer>
         </SafeAreaProvider>
@@ -220,7 +314,7 @@ const authContext = useMemo(()=> ({
         <SafeAreaProvider>
             <NavigationContainer>
                 <Stack.Navigator screenOptions={{headerShown: false}}>
-                    { user ? (
+                    { loginState.userId !== null ? (
                        <>
                           <Stack.Screen name="Root" component={Root} />
                           <Stack.Screen name="Form" component={Form} />
@@ -229,7 +323,6 @@ const authContext = useMemo(()=> ({
                         ):(
                           <Stack.Screen name="AppStackWithoutIntro" component={AppStackWithoutIntro} />
                           ) 
-                          
                     }
                 </Stack.Navigator>
             </NavigationContainer>
@@ -258,155 +351,3 @@ const styles = StyleSheet.create({
 
 
 
-
-{/* 
-{/* 
-//   return (
-//     <SafeAreaProvider>
-//             <NavigationContainer>
-//             { user ? (
-//                     <Drawer.Navigator initialRouteName="ClientHome"> *
-//                           <Drawer.Screen name="PersonalHome" component={PersonalHome} />
-//                           <Drawer.Screen name="ClientHome" component={ClientHome} />
-//                     </Drawer.Navigator>
-
-//                   ):(
-
-//           //         <Stack.Navigator screenOptions={{
-//           //           headerShown: false
-//           //         }}>
-//           //                         <Tab.Screen name="Demo" component={Demo} />
-
-//           //             {/* <Tab.Screen name="HomeScreen" component={HomeScreen} /> */}
-//           //           {/* <Tab.Screen name="AppStackWithIntro" component={AppStackWithIntro} /> */}
-//           //     //     </Stack.Navigator>
-//           //         )
-
-
-                  
-//             </NavigationContainer>
-//     </SafeAreaProvider>
-
-//   );
-// }
-// //       <NavigationContainer>
-// //             <Drawer.Navigator initialRouteName="Client">
-// //         <Drawer.Screen name="Home" component={HomeScreen} />
-// //         <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-// //       </Drawer.Navigator>
-// //     </NavigationContainer>
-// //   );
-
-// //   { user ? ( */}
-//                     <Tab.Navigator screenOptions={{
-//                           headerShown: false}}>
-//                         <Tab.Screen name="Sandbox" component={Sandbox} />
-//                         {/* <Tab.Screen name="HomeScreen" component={HomeScreen} />
-//                         <Tab.Screen name="Order" component={Order} />
-//                         <Tab.Screen name="Payment" component={Payment} />
-//                         <Tab.Screen name="Confirm" component={Confirm} />
-//                         <Tab.Screen name="Dashboard" component={Dashboard} /> */}
-//               </Tab.Navigator> 
-
-            
-        
-//         ):(
-
-//         <Stack.Navigator screenOptions={{
-//           headerShown: false
-//         }}>
-//                         <Tab.Screen name="Demo" component={Demo} />
-
-//             {/* <Tab.Screen name="HomeScreen" component={HomeScreen} /> */}
-//           {/* <Tab.Screen name="AppStackWithIntro" component={AppStackWithIntro} /> */}
-//     //     </Stack.Navigator>
-//         )
-//       }
-//     </NavigationContainer>
-
-//   );
-// }
-
-
-
-// function AppStackWithOutIntro(){
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Login" component={Login} />
-//     </Stack.Navigator>
-//   );
-// }
-
-// export default function App() {
-//   useEffect(() => {
-//     const usersRef = firebase.firestore().collection('users');
-//     firebase.auth().onAuthStateChanged(user => {
-//       if (user) {
-//         usersRef
-//           .doc(user.uid)
-//           .get()
-//           .then((document) => {
-//             const userData = document.data()
-//             setLoading(false)
-//             setUser(userData)
-//           })
-//           .catch((error) => {
-//             setLoading(false)
-//           });
-//       } else {
-//         setLoading(false)
-//       }
-//     });
-//   }, []);
-  
-
-//   function loadingFunction(loading){
-//     if (loading) {	
-//       return (	
-//         <>
-//         <View>
-//         <Text>Loading YEEEEE %%%%%%%%%%%%%%</Text>
-//         </View>
-//         </>	
-//       )	
-//   }
-//   }
-
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator screenOptions={{
-//     headerShown: false
-//   }}>
-//         { user ? (
-//           <>
-//           <Stack.Screen name="Home">
-//             {props => <Home {...props} extraData={user} />}
-//           </Stack.Screen>
-//            </>
-//         ) : (  <>
-
-//           { showIntro ? (
-//              <>
-//              <Stack.Screen name="AppIntro" component={AppIntro} />
-//              <Stack.Screen name="Login" component={Login} />
-//              <Stack.Screen name="Signup" component={Signup} />           
-//              </>
-
-//           ) : (                          
-
-//             <>    
-//                   <Stack.Screen name="Login" component={Login} />
-//                   <Stack.Screen name="Signup" component={Signup} />
-//                   <Stack.Screen name="Otp" component={Otp} />
-//             </>
-//           ) 
-//         }
-        
-//           </>
-//         ) 
-//       }
-//       </Stack.Navigator>
-//     </NavigationContainer>
-
-//   );
-// }

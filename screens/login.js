@@ -5,6 +5,7 @@ import { firebase } from '../firebase/config';
 import  {AuthContext} from '../components/context'
 import { primaryColor, primaryColorBg, secondaryColor, secondaryColorBg } from '../assets/THEME/theme';
 import {  SafeAreaView } from 'react-native-safe-area-context';
+import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
 
 
 
@@ -27,43 +28,46 @@ export default function Login({navigation}) {
 
 
   const {login} = React.useContext(AuthContext)
+  
+  const loginHandle = (email, password) => {
+      login(email, password)
+  
+  }
+  
 
-  const onLoginPress = () => {
-      try{ 
-                    setAnimationLoading(true)
-                    firebase
-                    .auth()
-                    .signInWithEmailAndPassword(email, password)
-                    .then((response) => {
-                        const uid = response.user.uid
-                        const usersRef = firebase.firestore().collection('users')
-                        usersRef
-                            .doc(uid)
-                            .get()
-                            .then(firestoreDocument => {
-                                if (!firestoreDocument.exists) {
-                                    Alert.alert("User does not exist anymore.")
-                                    setAnimationLoading(false)
-                                    return;
-                                }
-                                const user = firestoreDocument.data()
-                                navigation.navigate('Root', {user})
-                            })
-                            .catch(error => {
-                                Alert.alert(error.message)
-                                setAnimationLoading(false)
-                            });
-                    })
-                    .catch(error => {
-                        Alert.alert(error.message)
-                        setAnimationLoading(false)
-                    })
-    }
-    catch(e){
-        Alert.alert("There is a problem with your internet connection. Please check the connection")
-        setAnimationLoading(false)
-    }           
-}
+
+//   const onLoginPress = () => {
+//       try{ 
+//                     setAnimationLoading(true)    
+//                     firebase
+//                     .auth()
+//                     .signInWithEmailAndPassword(email, password)
+//                     .then((response) => {
+//                         console.log(response)    
+//                         const uid = response.user.uid
+//                         navigation.navigate("Login")
+                
+//                     })
+//                     .catch(error => {
+//                         Alert.alert(error.message)    
+//                         setAnimationLoading(false)
+//                     })
+//     }
+//     catch(e){
+//         Alert.alert("There is a problem with your internet connection. Please check the connection")    
+//         setAnimationLoading(false)
+//     }           
+// }
+
+
+
+
+
+
+
+
+
+
 
     return (
         
@@ -104,7 +108,7 @@ export default function Login({navigation}) {
                 <>
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => login()}>
+                onPress={() => {loginHandle(email, password)}}>
                 <Text style={styles.buttonTitle}>Log in</Text>
             </TouchableOpacity>
             </>

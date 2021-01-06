@@ -9,6 +9,7 @@ import {
     DrawerItem,
 } from '@react-navigation/drawer'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import  {AuthContext} from '../components/context'
 
 
 
@@ -16,16 +17,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export function DrawerContent(){
     const [animationLoading, setAnimationLoading] = useState(false)
 
+    const {logOut} = React.useContext(AuthContext)
 
-    function logOut({navigation}) {
-        setAnimationLoading(true)
-        firebase.auth().signOut().then(function() {
-            navigation.navigate('AppWithoutIntro')
-            }).catch(function(error) {
-                console.log("Error occured during logout")
-                setAnimationLoading(false)
-        });
-    }
+    // function pressedLogOut({navigation}) {
+    //     setAnimationLoading(true)
+    //     firebase.auth().signOut().then(function() {
+    //         navigation.navigate('AppWithoutIntro')
+    //         }).catch(function(error) {
+    //             console.log("Error occured during logout")
+    //             setAnimationLoading(false)
+    //     });
+    // }
 
 
     return(

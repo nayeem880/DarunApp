@@ -14,7 +14,7 @@ import {
 
 } from 'react-native';
 import AppIntroSlider from "react-native-app-intro-slider"
-import Icon from 'react-native-ionicons';
+// import Icon from 'react-native-ionicons';
 
 const slides = [
   
@@ -110,11 +110,11 @@ export default function AppIntro({navigation}) {
             return(
               <>
               <View style={styles.renderNextButton}>
-              <Icon
+              {/* <Icon
                   name="md-arrow-round-forward"
                   size={24}
                   style={{backgroundColor: 'transparent'}}
-                />
+                /> */}
               </View>
               </>
             )
@@ -124,11 +124,11 @@ export default function AppIntro({navigation}) {
             return(
               <>
               <View style={styles.renderPrevButton}>
-              <Icon
+              {/* <Icon
                   name="md-arrow-round-backward"
                   size={24}
                   style={{backgroundColor: 'transparent'}}
-                />
+                /> */}
               </View>
               </>
             )
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     height:40,
     justifyContent: "center",
     alignContent: "center",
-    backgroundColor: secondaryColorBg,
+    backgroundColor: primaryColorBg,
     borderRadius : 15,
   },
   renderPrevButton:{
@@ -190,6 +190,6 @@ const styles = StyleSheet.create({
     height:40,
     justifyContent: "center",
     alignContent: "center",
-    backgroundColor: secondaryColorBg,
+    backgroundColor: primaryColorBg,
   },
 });
