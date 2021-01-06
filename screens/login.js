@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Text, TextInput, Alert, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, Alert, TouchableOpacity,StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from '../styles/loginstyle';
 import { firebase } from '../firebase/config';
 import  {AuthContext} from '../components/context'
+import { primaryColor, primaryColorBg, secondaryColor, secondaryColorBg } from '../assets/THEME/theme';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 
 
 
@@ -29,7 +31,7 @@ export default function Login({navigation}) {
         .then((response) => {
             const uid = response.user.uid
             const usersRef = firebase.firestore().collection('users')
-            console.log("LOgin SUccessful")
+            console.log("Login SUccessful")
             usersRef
                 .doc(uid)
                 .get()
@@ -54,18 +56,17 @@ export default function Login({navigation}) {
 
     return (
         
-         <View style={styles.container}>
-            <KeyboardAwareScrollView
-            style={{ flex: 1, width: '100%' }}
+         <SafeAreaView style={styles.container}>
+            <KeyboardAwareScrollView style={styles.nestedcontainer}
             keyboardShouldPersistTaps="always">
-            <Image
-                style={styles.logo}
-                source={require('../assets/logo.png')}
-            />
+                <Image
+                    style={styles.logo}
+                    source={require('../assets/ICONS/login.png')}
+                />
             <TextInput
                 style={styles.input}
                 placeholder='E-mail'
-                placeholderTextColor="#aaaaaa"
+                placeholderTextColor={primaryColorBg}
                 onChangeText={(text) => setEmail(text)}
                 value={email}
                 underlineColorAndroid="transparent"
@@ -73,7 +74,7 @@ export default function Login({navigation}) {
             />
             <TextInput
                 style={styles.input}
-                placeholderTextColor="#aaaaaa"
+                placeholderTextColor={primaryColorBg}
                 secureTextEntry
                 placeholder='Password'
                 onChangeText={(text) => setPassword(text)}
@@ -94,7 +95,75 @@ export default function Login({navigation}) {
                 <Text style={styles.footerText}>Or Forgot Password?<Text onPress={onOtpLinkPress} style={styles.footerLink}>Recover Password</Text></Text>
             </View>
         </KeyboardAwareScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
 
+
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 11,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: secondaryColorBg,
+        flexDirection: 'column'
+
+    },
+    nestedcontainer: {
+        flex: 1,
+        width: '100%',
+        marginTop: 20,
+        marginBottom: 20,
+        margin : 20,
+        padding: 30,
+        borderRadius: 15,
+        
+    },
+    logo: {
+        width: '100%',
+        height: 120,
+        marginTop:10,
+        resizeMode: 'contain',
+    },
+    input: {
+        height: 50,
+        borderRadius: 5,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        marginBottom: 10,
+        paddingLeft: 15,
+    },
+    button: {
+        backgroundColor: primaryColor,
+        color: "white",
+        // marginLeft: 30,
+        // marginRight: 30,
+        marginTop: 20,
+        height: 50,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: 'center'
+    },
+    buttonTitle: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: "bold"
+    },
+    footerView: {
+        flex: 1,
+        alignItems: "center",
+        marginTop: 20
+    },
+    footerText: {
+        fontSize: 14,
+        color: primaryColor,
+    },
+    footerLink: {
+        color: secondaryColor,
+        fontWeight: "bold",
+        fontSize: 14,
+        paddingLeft:5,
+    }
+})

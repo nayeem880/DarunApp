@@ -19,7 +19,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import HomeScreen from './homescreen';
 
 
-export default function Form({navigation}) {
+export default function Enlist({navigation}) {
     const [location, setLocation] = useState('');
     const [time, setTime] = useState('');
     const [minute, setMinute] = useState('');
@@ -54,7 +54,7 @@ export default function Form({navigation}) {
                 <View style = {styles.nestedBottomContainer}>
 
             <Text style = {styles.headingText}>
-            বিজ্ঞাপন দিন 
+            এনালিস্ট ডিসপ্লে 
             </Text>
             <Text style = {styles.subheadingText}>
             মাত্র কয়েক সেকেন্ডেই আপনার বিজ্ঞাপন দেখুন বসুন্ধরা যমুনা সহ ৬০ টির বেশি শপিং কমপ্লেক্স এর ডিজিটাল সাইনেজ ডিসপ্লে তে 
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
         width: 40,
         borderRadius: 5,
 
+        // backgroundColor: 'red',
 
       },
       

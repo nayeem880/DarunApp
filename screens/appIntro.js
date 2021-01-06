@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import AppIntroSlider from 'react-native-app-intro-slider';
+import { primaryColor, primaryColorBg, secondaryColor, secondaryColorBg } from '../assets/THEME/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect,useMemo, useReducer,  useState } from 'react'
 
 
 // import all the components we are going to use
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
@@ -20,35 +20,48 @@ const slides = [
   
   {
       key: 'one',
-      title: 'Welcome to Darun App',
+      title: 'Showcase Your Brand Through Digital Signage Displays',
       text: 'Darun App helps you to feel darun',
-      image: require('../assets/images/avatar.png'),
-      backgroundColor: '#a5e4d0',
+      image: require('../assets/ICONS/signage.png'),
+      backgroundColor: secondaryColorBg,
 
     },
- 
- 
+    
   {
     key: 'two',
-    title: 'Digital Marketing in Physical Signage Displays',
+    title: "Darun App helps you to feel darun",
+    text: 'Darun App helps you to feel darun',
+    image: require('../assets/ICONS/shop.png'),
+    backgroundColor: secondaryColorBg,
+
+  },
+ 
+  {
+    key: 'three',
+    title: "Pay Only For What You've Used for",
     text: 'Darun app helps your brand to reflect and thrive through digital displays',
-    backgroundColor: '#FFC5C5',
-    image: require('../assets/images/delivery.png'),
+    backgroundColor: secondaryColorBg,
+    image: require('../assets/ICONS/pOffer.png'),
     },
     {
-      key: 'three',
+      key: 'four',
       title: 'Enlist Your Display For Rent',
       text: 'Provide rent of your display and earn hourly',
-      backgroundColor: '#00FFB2',
-      image: require('../assets/images/avatar2.png'),
+      backgroundColor: secondaryColorBg,
+      image: require('../assets/ICONS/influencer.png'),
+    },
+    {
+      key: 'Five',
+      title: 'Enlist Your Display For Rent',
+      text: 'Provide rent of your display and earn hourly',
+      backgroundColor: secondaryColorBg,
+      image: require('../assets/ICONS/walk.png'),
     },
 ];
 
 
 
 export default function AppIntro({navigation}) {
-  const [showRealApp, setShowRealApp] = useState(false);
-
   
   const onDone = () => {
     navigation.navigate("Login")
@@ -58,41 +71,42 @@ export default function AppIntro({navigation}) {
     navigation.navigate("Login")
   };
 
-
   const RenderItem = ({item}) => {
     return (
-      <View
+      <SafeAreaView
         style={{
           flex: 1,
           backgroundColor: item.backgroundColor,
           alignItems: 'center',
-          justifyContent: 'space-around',
-          paddingBottom: 100,
+          justifyContent: 'center',
+          paddingBottom: 5,
+          flexDirection:"column",
         }}>
-        <Text style={styles.introTitleStyle}>
-          {item.title}
-        </Text>
-        <Image
-          style={styles.introImageStyle}
-          source={item.image} />
-        <Text style={styles.introTextStyle}>
-          {item.text}
-        </Text>
-      </View>
+          <View style={styles.nestedcontainer}>
+            <Image
+              style={styles.introImageStyle}
+              source={item.image} />
+            <Text style={styles.introTitleStyle}>
+              {item.title}
+            </Text>
+            <Text style={styles.introTextStyle}>
+              {item.text}
+            </Text>
+          </View>
+      </SafeAreaView>
+     
     );
   };
   
-
   return(
 <>
      
-    
         <AppIntroSlider 
-          activeDotStyle={{width:40, backgroundColor:'black'}}
+          activeDotStyle={{width:30, backgroundColor:'black'}}
           data={slides}
           renderItem={RenderItem}
           onDone={onDone}
-          showSkipButton={true}
+          showSkipButton={false}
           onSkip={onSkip}/>
     </>
     );
@@ -101,79 +115,37 @@ export default function AppIntro({navigation}) {
 
   
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+  nestedcontainer: {
+    height:200,
+    backgroundColor: secondaryColorBg,
     padding: 10,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   titleStyle: {
-    padding: 10,
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
   },
   paragraphStyle: {
-    padding: 20,
     textAlign: 'center',
     fontSize: 16,
   },
   introImageStyle: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+    marginBottom:20,
   },
   introTextStyle: {
-    fontSize: 18,
-    color: 'white',
+    fontSize: 12,
+    color: secondaryColor,
     textAlign: 'center',
-    paddingVertical: 30,
   },
   introTitleStyle: {
-    fontSize: 25,
-    color: 'white',
+    fontSize: 14,
+    color: primaryColor,
     textAlign: 'center',
-    marginBottom: 16,
     fontWeight: 'bold',
   },
 });
-
-
-
-
-
-
-// const Skip=({...props})=>(
-//   <Button title="Skip"
-//   color="#black"
-//   />
-// )
-
-// const Next=({...props})=>(
-//   <Button title="Next"
-//   color="#black"
-//   {...props}
-//   />
-// )
-
-// const Done=({...props})=>(
-//   <TouchableOpacity style={{marginHorizontal:8}}
-//   {...props}>
-//       <Text style={{fontSize: 16}}>Done</Text>
-//   </TouchableOpacity>
-// )
-
-
-// const Dots=({selected})=> {
-//   let bgColor = selected? 'rgba(0,0,0,0.8)': 'rgba(0,0,0,0.3)';
-//   return (
-//     <View style={{
-//       width:5,
-//       height:5,
-//       marginHorizontalL:3,
-//       bgColor}} >
-
-//     </View>
-//   )
-// }
-

@@ -17,11 +17,15 @@ import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 // importing the screens
-import {AppIntro, Login, Signup,HomeScreen, Qr, Dashboard, Confirm, Payment,Form,  Order, Otp, } from './screens/index';
-import {primaryColor, secondaryColor} from './assets/THEME/theme.js'
+import {AppIntro, Login, Signup,HomeScreen, Qr, Dashboard, Confirm, Payment,Form,Enlist,  Order, Otp, } from './screens/index';
+import {primaryColor, secondaryColor, secondaryColorBg} from './assets/THEME/theme.js'
 import  {AuthContext} from './components/context'
 import { StyleSheet,TouchableOpacity, TouchableHighlight, Image, View, Text} from 'react-native';
 import customBottom from "./styles/customBottom"
+import {DrawerContent} from "./screens/drawerContent"
+
+
+
 // creating the stack navigator object
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -69,7 +73,8 @@ function Root(){
       style:{
         borderRadius: 10,
         margin:5,
-        backgroundColor: 'white',
+        color: 'white',
+        backgroundColor: secondaryColorBg,
       }
     }}
     keyboardHidesTabBar ={true}
@@ -100,6 +105,8 @@ return (
                    headerShown: false }}>
     <Stack.Screen name="AppIntro" component={AppIntro} />
     <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="Signup" component={Signup} />
+    <Stack.Screen name="Otp" component={Otp} />
   </Stack.Navigator>
 );
 }
@@ -116,11 +123,12 @@ return (
   </Stack.Navigator>
 );
 }
+
 function AdvertiseStack(){
 return (
   <Stack.Navigator screenOptions={{
   headerShown: false
-}}>
+ }}>
     <Stack.Screen name="Form" component={Form} />
     <Stack.Screen name="Order" component={Order} />
     <Stack.Screen name="Payment" component={Payment} />
@@ -141,24 +149,19 @@ function ClientHome({ navigation }) {
 );
 }
 
+
 function PersonalHome({ navigation }) {
 return (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Button onPress={() => navigation.goBack()} title="Go back home" />
-  </View>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button onPress={() => navigation.goBack()} title="Go back home" />
+    </View>
 );
 }
 
-  
+
 // App stack views **************************************************************
 // ***********************************************************************************
 // Ends here app stack views
-
-
-
-
-
-
 
 
 
@@ -183,7 +186,7 @@ const authContext = useMemo(()=> ({
        useEffect(()=>{
           setTimeout(()=> {
             setIsLoading(false);
-          }, 100); 
+          }, 2000); 
   
         // onboarding functionality with the asyncstorage 
             AsyncStorage.getItem('donelaunched').then(value=>{
@@ -213,8 +216,9 @@ const authContext = useMemo(()=> ({
                                   setLoading(false)
                                 });
                             } 
+
                             else {setLoading(false)}  
-                                  } );
+                                  });
                     }, []);
 
                 
@@ -232,12 +236,14 @@ const authContext = useMemo(()=> ({
       <AuthContext.Provider value={authContext}>
         <SafeAreaProvider>
               <NavigationContainer>
-                  <Drawer.Navigator screenOptions={{
+                  <Drawer.Navigator drawerContent={props => <DrawerContent {...props} /> }  screenOptions={{
                             headerShown: false}}>
                        {/* <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
                        <Stack.Screen name="Root" component={Root} /> */}
+                      <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
                       <Stack.Screen name="Root" component={Root} />
                       <Stack.Screen name="Form" component={Form} />
+                      <Stack.Screen name="Enlist" component={Enlist} />
                   </Drawer.Navigator>
               </NavigationContainer>
         </SafeAreaProvider>
@@ -253,8 +259,10 @@ const authContext = useMemo(()=> ({
                   headerShown: false}}>
                       {/* <Stack.Screen name="AppStackWithoutIntro" component={AppStackWithoutIntro} />
                       <Stack.Screen name="Root" component={Root} /> */}
+                    <Stack.Screen name="AppStackWithIntro" component={AppStackWithIntro} />
                     <Stack.Screen name="Root" component={Root} />
                     <Stack.Screen name="Form" component={Form} />
+                    <Stack.Screen name="Enlist" component={Enlist} />
 
                 </Tab.Navigator>
             </NavigationContainer>

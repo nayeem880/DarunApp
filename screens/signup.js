@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Image, Text, TextInput, Alert, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, Alert, TouchableOpacity,StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from '../styles/signupstyle';
 import { firebase } from '../firebase/config'
 import  {AuthContext} from '../components/context'
+import { primaryColor, primaryColorBg, secondaryColor, secondaryColorBg } from '../assets/THEME/theme';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function Signup({navigation}) {
@@ -49,18 +50,18 @@ export default function Signup({navigation}) {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <KeyboardAwareScrollView
-                style={{ flex: 1, width: '100%' }}
+                style={styles.nestedcontainer}
                 keyboardShouldPersistTaps="always">
                 <Image
                     style={styles.logo}
-                    source={require('../assets/logo.png')}
+                    source={require('../assets/ICONS/createAccount.png')}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder='Full Name'
-                    placeholderTextColor="#aaaaaa"
+                    placeholderTextColor={primaryColorBg}
                     onChangeText={(text) => setFullName(text)}
                     value={fullName}
                     underlineColorAndroid="transparent"
@@ -69,7 +70,7 @@ export default function Signup({navigation}) {
                 <TextInput
                     style={styles.input}
                     placeholder='E-mail'
-                    placeholderTextColor="#aaaaaa"
+                    placeholderTextColor={primaryColorBg}
                     onChangeText={(text) => setEmail(text)}
                     value={email}
                     underlineColorAndroid="transparent"
@@ -77,7 +78,7 @@ export default function Signup({navigation}) {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholderTextColor="#aaaaaa"
+                    placeholderTextColor={primaryColorBg}
                     secureTextEntry
                     placeholder='Password'
                     onChangeText={(text) => setPassword(text)}
@@ -87,7 +88,7 @@ export default function Signup({navigation}) {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholderTextColor="#aaaaaa"
+                    placeholderTextColor={primaryColorBg}
                     secureTextEntry
                     placeholder='Confirm Password'
                     onChangeText={(text) => setConfirmPassword(text)}
@@ -104,6 +105,76 @@ export default function Signup({navigation}) {
                     <Text style={styles.footerText}>Already got an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
                 </View>
             </KeyboardAwareScrollView>
-        </View>
+        </SafeAreaView>
     )
 }
+
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: secondaryColorBg,
+        flexDirection: 'column',
+        
+        justifyContent: 'center',
+        alignItems: 'center',
+
+    },
+    nestedcontainer: {
+        flex: 1,
+        width: '100%',
+        marginBottom: 20,
+        borderRadius: 15,
+        
+    },
+    logo: {
+        width: '100%',
+        height: 120,
+        marginTop:20,
+        paddingTop:20,
+        resizeMode: 'contain',
+        marginBottom: 20,
+    },
+    input: {
+        height: 50,
+        borderRadius: 5,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        marginBottom: 10,
+        marginLeft: 30,
+        marginRight: 30,
+        paddingLeft: 15
+    },
+    button: {
+        backgroundColor: primaryColor,
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 20,
+        height: 50,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: 'center'
+    },
+    buttonTitle: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: "bold"
+    },
+    footerView: {
+        flex: 1,
+        alignItems: "center",
+        marginTop: 10
+    },
+    footerText: {
+        fontSize: 14,
+        color: primaryColor,
+    },
+    footerLink: {
+        color: secondaryColor,
+        fontWeight: "bold",
+        fontSize: 14,
+    }
+})

@@ -1,44 +1,46 @@
 import React from 'react';
 import {  StyleSheet, 
     Text, 
-    TextInput,
     View,
     Image,
-    Alert,
     Button,
-    ScrollView,
-    SafeAreaView,
+    
 } from 'react-native';
+import { primaryColor, secondaryColor, secondaryColorBg, primaryColorBg } from '../assets/THEME/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Qr({navigation}) {
     return(
-        <View style = {styles.container}>
-            <Text style = {styles.bigText}>
-QR Page for qr code scan
-        </Text>
-            <Button
-        title="Go to Home"
-        onPress={() => navigation.navigate('Dashbaord')}
-      />
-        </View>
+        <SafeAreaView style = {styles.container}>
+            <Image
+          style={styles.introImageStyle}
+          source={require('../assets/ICONS/scann.png')} />
+            <Text style = {styles.paragraphStyle}>
+                 QR Page for qr code scan
+            </Text>
+        </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 5,
-      height: "100%",
-      width: '100%',
-    },
   
-    bigText:{
-      fontSize: 30,
-      color: '#ff1493',
-      },
-    }
-);
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: secondaryColorBg,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+  },
+  paragraphStyle: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: primaryColor,
+  },
+  introImageStyle: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+    marginBottom:10,
+  },
+})

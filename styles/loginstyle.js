@@ -12,8 +12,8 @@ export default StyleSheet.create({
         flex: 1,
         height: 120,
         width: 90,
-        alignSelf: "center",
-        margin: 30
+        margin: 30,
+        resizeMode: 'center',
     },
     input: {
         height: 48,

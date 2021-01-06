@@ -9,9 +9,9 @@ import Confirm from './confirm'
 import AppIntro from './appIntro'
 import Qr from './qr'
 import Form from './form'
-import Sandbox from './sandbox'
+import Enlist from './enlist'
 
 
 export {
- HomeScreen, Login, Signup, Otp, Confirm, Order, Payment, Dashboard, AppIntro,Qr, Form, Sandbox
+ HomeScreen, Login, Signup, Otp, Confirm, Order, Payment, Dashboard, AppIntro,Qr, Form, Enlist,
 }
